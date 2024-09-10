@@ -14,15 +14,22 @@ def inserir_cliente(conexao):
 def alterar_cliente(conexao):
     cursor = conexao.cursor()
     id =   input("Digite o ID que deseja alterar: ")
-    nome = input("Digite o novo nome: ")
-    email = input("Digite o novo email: ")
-    telefone = input("Digite o novo telefone: ")
+    cursor.execute("SELECT * from cliente where id = %s", (id,))
+    resultado = cursor.fetchone()
 
-    sql_update = "update cliente set nome = %s, email = %s, telefone = %s where id = %s"
-    dados = (nome, email, telefone, id)
-    cursor.execute(sql_update, dados)
-    conexao.commit()
-    print("Cliente alterado com sucesso!")
+    if resultado is None:
+        print(f"ERRO: O cliente com ID {id} não exite.")
+
+    else:
+        nome = input("Digite o novo nome: ")
+        email = input("Digite o novo email: ")
+        telefone = input("Digite o novo telefone: ")
+
+        sql_update = "update cliente set nome = %s, email = %s, telefone = %s where id = %s"
+        dados = (nome, email, telefone, id)
+        cursor.execute(sql_update, dados)
+        conexao.commit()
+        print("Cliente alterado com sucesso!")
 
 def listar_cliente(conexao):
     cursor = conexao.cursor()
@@ -37,9 +44,16 @@ def listar_cliente(conexao):
 def deletar_cliente(conexao):
     cursor = conexao.cursor()
     id = (input("Digite o ID que deseja Deletar: "))
-        
-    sql_delete = "delete from cliente where id =" + id
-    cursor.execute(sql_delete)
-    conexao.commit()
+    
+    cursor.execute("SELECT * from cliente where id = %s", (id,))
+    resultado = cursor.fetchone()
 
-    print(f"Cliente com ID {id} deletado com sucesso!")
+    if resultado is None:
+        print(f"ERRO: O cliente com ID {id} não exite.")
+        
+    else: 
+        sql_delete = "delete from cliente where id =" + id
+        cursor.execute(sql_delete)
+        conexao.commit()
+
+        print(f"Cliente com ID {id} deletado com sucesso!")
