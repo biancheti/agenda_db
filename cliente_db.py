@@ -1,6 +1,4 @@
 
-id_cliente = [0]
-
 def inserir_cliente(conexao):
     cursor = conexao.cursor()
     nome = (input("Digite o Nome do(a) Cliente: "))
@@ -12,6 +10,19 @@ def inserir_cliente(conexao):
     cursor.execute(sql_insert, registro)
     conexao.commit()
     print("Cliente Cadastrado com Sucesso!")
+
+def alterar_cliente(conexao):
+    cursor = conexao.cursor()
+    id =   input("Digite o ID que deseja alterar: ")
+    nome = input("Digite o novo nome: ")
+    email = input("Digite o novo email: ")
+    telefone = input("Digite o novo telefone: ")
+
+    sql_update = "update cliente set nome = %s, email = %s, telefone = %s where id = %s"
+    dados = (nome, email, telefone, id)
+    cursor.execute(sql_update, dados)
+    conexao.commit()
+    print("Cliente alterado com sucesso!")
 
 def listar_cliente(conexao):
     cursor = conexao.cursor()
